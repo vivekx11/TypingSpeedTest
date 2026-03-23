@@ -1,4 +1,4 @@
-# How to Launch the Typing Speed Test
+# How to Launch the Typing Speed Test..
 
 ## Quick Start
 
