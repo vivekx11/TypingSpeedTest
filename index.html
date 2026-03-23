@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Test your typing speed with our free 60-second typing test. Get instant WPM, CPM, and accuracy results with skill level assessment.">
+    <meta name="keywords" content="typing test, typing speed, WPM test, typing practice, keyboard test">
+    <meta name="author" content="Typing Speed Test">
+    
+    <!-- Open Graph / Social Media -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Typing Speed Test - Measure Your WPM">
+    <meta property="og:description" content="Free 60-second typing speed test with instant results. No signup required.">
+    
+    <title>Typing Speed Test - Free WPM Test | Test Your Typing Skills</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loader"></div>
+        <p>Loading...</p>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <svg class="logo-icon" width="32" height="32" viewBox="0 0 32 32" fill="none">
+                    <rect width="32" height="32" rx="8" fill="url(#gradient)"/>
+                    <path d="M8 12h16M8 16h16M8 20h10" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                    <defs>
+                        <linearGradient id="gradient" x1="0" y1="0" x2="32" y2="32">
+                            <stop offset="0%" stop-color="#667eea"/>
+                            <stop offset="100%" stop-color="#764ba2"/>
+                        </linearGradient>
+                    </defs>
+                </svg>
+                <span class="brand-name">TypeSpeed</span>
+            </div>
+            <div class="nav-links">
+                <button class="nav-link" id="howItWorksBtn">How it Works</button>
+                <button class="nav-link" id="leaderboardBtn">Leaderboard</button>
+                <button class="nav-link" id="settingsBtn">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+                        <path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container">
+        <header class="hero">
+            <h1 class="hero-title">Test your typing skills</h1>
+            <p class="hero-subtitle">Measure your typing speed in 60 seconds. No signup required.</p>
+        </header>
+
+        <section class="test-area" id="testArea">
+            <!-- Test Controls -->
+            <div class="test-controls">
+                <button class="control-btn" id="restartBtn" title="Restart test (Ctrl+R)">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+                        <path d="M4 2v6h6M16 18v-6h-6M4 8a8 8 0 0112.95-6.36M16 12a8 8 0 01-12.95 6.36"/>
+                    </svg>
+                </button>
+                <div class="difficulty-selector">
+                    <button class="difficulty-btn active" data-difficulty="easy">Easy</button>
+                    <button class="difficulty-btn" data-difficulty="medium">Medium</button>
+                    <button class="difficulty-btn" data-difficulty="hard">Hard</button>
+                </div>
+            </div>
+
+            <div class="timer-section">
+                <div class="timer" id="timer" aria-live="polite" aria-atomic="true">
+                    <svg class="timer-circle" width="120" height="120">
+                        <circle class="timer-circle-bg" cx="60" cy="60" r="54"/>
+                        <circle class="timer-circle-progress" cx="60" cy="60" r="54" id="timerProgress"/>
+                    </svg>
+                    <div class="timer-content">
+                        <span class="timer-value" id="timerValue">60</span>
+                        <span class="timer-label">sec</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="stats" aria-live="polite">
+                <div class="stat">
+                    <div class="stat-icon">⚡</div>
+                    <span class="stat-value" id="wpm">0</span>
+                    <span class="stat-label">WPM</span>
+                </div>
+                <div class="stat">
+                    <div class="stat-icon">📝</div>
+                    <span class="stat-value" id="cpm">0</span>
+                    <span class="stat-label">CPM</span>
+                </div>
+                <div class="stat">
+                    <div class="stat-icon">🎯</div>
+                    <span class="stat-value" id="accuracy">100</span>
+                    <span class="stat-label">% Accuracy</span>
+                </div>
+                <div class="stat">
+                    <div class="stat-icon">✅</div>
+                    <span class="stat-value" id="correctWords">0</span>
+                    <span class="stat-label">Correct</span>
+                </div>
+            </div>
+
+            <div class="words-container">
+                <div class="words-display" id="wordsDisplay" aria-label="Words to type"></div>
+                <div class="words-fade-top"></div>
+                <div class="words-fade-bottom"></div>
+            </div>
+
+            <div class="input-container">
+                <label for="typingInput" class="visually-hidden">Type the words here</label>
+                <input 
+                    type="text" 
+                    id="typingInput" 
+                    class="typing-input" 
+                    placeholder="Click here or press any key to start..."
+                    autocomplete="off"
+                    autocorrect="off"
+                    autocapitalize="off"
+                    spellcheck="false"
+                    aria-describedby="instructions"
+                >
+                <div class="input-hint" id="inputHint">
+                    <kbd>Space</kbd> to submit word • <kbd>Backspace</kbd> to correct
+                </div>
+                <p id="instructions" class="visually-hidden">Type the words shown above. Press space to submit each word.</p>
+            </div>
+
+            <!-- Progress Bar -->
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+        </section>
+
+        <!-- Info Cards -->
+        <section class="info-section">
+            <div class="info-cards">
+                <div class="info-card">
+                    <div class="info-icon">🚀</div>
+                    <h3>Instant Results</h3>
+                    <p>Get your WPM, CPM, and accuracy immediately after the test</p>
+                </div>
+                <div class="info-card">
+                    <div class="info-icon">📊</div>
+                    <h3>Track Progress</h3>
+                    <p>See your improvement over time with detailed statistics</p>
+                </div>
+                <div class="info-card">
+                    <div class="info-icon">🎓</div>
+                    <h3>Skill Levels</h3>
+                    <p>From Beginner to Expert - know where you stand</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tips Section -->
+        <section class="tips-section" id="tips">
+            <h2>How to Type Faster</h2>
+            <div class="tips-grid">
+                <div class="tip-card">
+                    <span class="tip-number">1</span>
+                    <h3>Proper Posture</h3>
+                    <p>Sit up straight with feet flat on the floor. Keep your wrists elevated and straight.</p>
+                </div>
+                <div class="tip-card">
+                    <span class="tip-number">2</span>
+                    <h3>Home Row Position</h3>
+                    <p>Place your fingers on ASDF and JKL; keys. This is your starting position.</p>
+                </div>
+                <div class="tip-card">
+                    <span class="tip-number">3</span>
+                    <h3>Don't Look Down</h3>
+                    <p>Keep your eyes on the screen, not the keyboard. Build muscle memory.</p>
+                </div>
+                <div class="tip-card">
+                    <span class="tip-number">4</span>
+                    <h3>Practice Daily</h3>
+                    <p>Consistency is key. Practice 15-30 minutes daily for best results.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Results Modal -->
+    <div class="modal" id="resultsModal" role="dialog" aria-labelledby="modalTitle" aria-modal="true">
+        <div class="modal-overlay" id="modalOverlay"></div>
+        <div class="modal-content">
+            <button class="modal-close" id="modalClose" aria-label="Close modal">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path d="M18 6L6 18M6 6l12 12" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+            </button>
+            
+            <div class="modal-header">
+                <div class="success-animation">
+                    <svg class="checkmark" viewBox="0 0 52 52">
+                        <circle class="checkmark-circle" cx="26" cy="26" r="25" fill="none"/>
+                        <path class="checkmark-check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/>
+                    </svg>
+                </div>
+                <h2 id="modalTitle">Test Complete!</h2>
+                <p class="modal-subtitle">Here's how you performed</p>
+            </div>
+
+            <div class="results">
+                <div class="result-highlight">
+                    <div class="result-main">
+                        <span class="result-main-value" id="finalWpm">0</span>
+                        <span class="result-main-label">WPM</span>
+                    </div>
+                    <div class="skill-badge-container">
+                        <span class="skill-badge" id="skillLevel">Beginner</span>
+                    </div>
+                </div>
+
+                <div class="result-grid">
+                    <div class="result-item">
+                        <span class="result-icon">📝</span>
+                        <div class="result-details">
+                            <span class="result-label">Characters/Min</span>
+                            <span class="result-value" id="finalCpm">0</span>
+                        </div>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-icon">🎯</span>
+                        <div class="result-details">
+                            <span class="result-label">Accuracy</span>
+                            <span class="result-value" id="finalAccuracy">0%</span>
+                        </div>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-icon">✅</span>
+                        <div class="result-details">
+                            <span class="result-label">Correct Words</span>
+                            <span class="result-value" id="finalCorrectWords">0</span>
+                        </div>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-icon">❌</span>
+                        <div class="result-details">
+                            <span class="result-label">Wrong Words</span>
+                            <span class="result-value" id="finalWrongWords">0</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="result-comparison" id="resultComparison">
+                    <p class="comparison-text"></p>
+                </div>
+            </div>
+
+            <div class="modal-actions">
+                <button class="btn-secondary" id="shareBtn">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+                        <path d="M15 8a3 3 0 11-2.977-2.63l-4.94 2.47a3 3 0 100 4.319l4.94 2.47a3 3 0 10.895-1.789l-4.94-2.47a3.027 3.027 0 000-.74l4.94-2.47C13.456 7.68 14.19 8 15 8z"/>
+                    </svg>
+                    Share Results
+                </button>
+                <button class="btn-primary" id="tryAgainBtn">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+                        <path d="M4 2v6h6M16 18v-6h-6M4 8a8 8 0 0112.95-6.36M16 12a8 8 0 01-12.95 6.36"/>
+                    </svg>
+                    Try Again
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Leaderboard Modal -->
+    <div class="modal" id="leaderboardModal" role="dialog" aria-labelledby="leaderboardTitle" aria-modal="true">
+        <div class="modal-overlay"></div>
+        <div class="modal-content modal-large">
+            <button class="modal-close" id="leaderboardClose" aria-label="Close modal">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path d="M18 6L6 18M6 6l12 12" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+            </button>
+            <h2 id="leaderboardTitle">🏆 Top Scores</h2>
+            <div class="leaderboard-content" id="leaderboardContent">
+                <p class="leaderboard-empty">Complete a test to see your score!</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div class="modal" id="settingsModal" role="dialog" aria-labelledby="settingsTitle" aria-modal="true">
+        <div class="modal-overlay"></div>
+        <div class="modal-content">
+            <button class="modal-close" id="settingsClose" aria-label="Close modal">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path d="M18 6L6 18M6 6l12 12" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+            </button>
+            <h2 id="settingsTitle">⚙️ Settings</h2>
+            <div class="settings-content">
+                <div class="setting-item">
+                    <label for="soundToggle">Sound Effects</label>
+                    <input type="checkbox" id="soundToggle" class="toggle-switch" checked>
+                </div>
+                <div class="setting-item">
+                    <label for="themeToggle">Dark Mode</label>
+                    <input type="checkbox" id="themeToggle" class="toggle-switch">
+                </div>
+                <div class="setting-item">
+                    <label for="showHintsToggle">Show Hints</label>
+                    <input type="checkbox" id="showHintsToggle" class="toggle-switch" checked>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>TypeSpeed</h4>
+                <p>Improve your typing speed with our free, no-signup-required typing test.</p>
+            </div>
+            <div class="footer-section">
+                <h4>Quick Links</h4>
+                <nav aria-label="Footer navigation">
+                    <a href="#about">About</a>
+                    <a href="#tips">Typing Tips</a>
+                    <a href="#contact">Contact</a>
+                    <a href="#privacy">Privacy</a>
+                </nav>
+            </div>
+            <div class="footer-section">
+                <h4>Resources</h4>
+                <nav>
+                    <a href="#blog">Blog</a>
+                    <a href="#faq">FAQ</a>
+                    <a href="#support">Support</a>
+                </nav>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 TypeSpeed. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="app.js"></script>
+</body>
+</html>
