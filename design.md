@@ -1,6 +1,6 @@
 # Design Document: Typing Speed Test Web Application
 
-## Overview
+## Overview.
 
 The typing speed test is a single-page web application that measures typing performance over a 60-second period. The system presents users with a sequence of random English words, tracks their typing accuracy in real-time, and calculates performance metrics including words per minute (WPM), characters per minute (CPM), accuracy percentage, and skill level classification.
 
