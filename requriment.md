@@ -90,7 +90,7 @@ This document specifies the requirements for a 60-second typing speed test web a
 
 ### Requirement 7: Final Results Calculation
 
-**User Story:** As a user, I want to see my final typing performance metrics, so that I can understand how well I performed.
+**User Story:** As a user, I want to see my final typing performance metrics, so that I can understand how well I performed..
 
 #### Acceptance Criteria
 
