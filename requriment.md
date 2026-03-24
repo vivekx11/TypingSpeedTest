@@ -195,4 +195,4 @@ This document specifies the requirements for a 60-second typing speed test web a
 1. THE Typing_Test_Engine SHALL allow users to complete a Test_Session without authentication
 2. THE UI_Controller SHALL not display login or signup prompts during the test experience
 3. THE Typing_Test_Engine SHALL function fully without requiring user registration
-4. ONCE YOU USE 
+4. 
