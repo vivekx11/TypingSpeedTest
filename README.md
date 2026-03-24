@@ -1,4 +1,4 @@
-# TypeSpeed - Advanced Typing Speed Test 🚀
+# TypeSpeed - Advanced Typing Speed Test 
 
 A professional-grade typing speed test with real-time analytics, achievements, keyboard heatmap, and multiple practice modes.
 
