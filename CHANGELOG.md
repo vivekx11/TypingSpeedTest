@@ -1,6 +1,6 @@
-# Changelog - Advanced Features Update
+# Changelog -  Features Update
 
-## 🚀 Major Upgrade: From Basic to Advanced
+## Major Upgrade: From Basic to Advanced
 
 ### 📊 New Analytics Features
 
