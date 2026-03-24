@@ -1,4 +1,4 @@
-// ===== Configuration =====
+// ===== Configuration ====
 const CONFIG = {
     TEST_DURATION: 60,
     UPDATE_INTERVAL: 100,
