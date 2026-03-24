@@ -67,6 +67,12 @@
                         <path d="M4 2v6h6M16 18v-6h-6M4 8a8 8 0 0112.95-6.36M16 12a8 8 0 01-12.95 6.36"/>
                     </svg>
                 </button>
+                <div class="mode-selector">
+                    <button class="mode-btn active" data-mode="words">Words</button>
+                    <button class="mode-btn" data-mode="quotes">Quotes</button>
+                    <button class="mode-btn" data-mode="code">Code</button>
+                    <button class="mode-btn" data-mode="custom">Custom</button>
+                </div>
                 <div class="difficulty-selector">
                     <button class="difficulty-btn active" data-difficulty="easy">Easy</button>
                     <button class="difficulty-btn" data-difficulty="medium">Medium</button>
@@ -108,6 +114,22 @@
                     <span class="stat-value" id="correctWords">0</span>
                     <span class="stat-label">Correct</span>
                 </div>
+                <div class="stat">
+                    <div class="stat-icon">🔥</div>
+                    <span class="stat-value" id="consistency">0</span>
+                    <span class="stat-label">Consistency</span>
+                </div>
+                <div class="stat">
+                    <div class="stat-icon">📈</div>
+                    <span class="stat-value" id="peakWpm">0</span>
+                    <span class="stat-label">Peak WPM</span>
+                </div>
+            </div>
+
+            <!-- Live WPM Graph -->
+            <div class="wpm-graph-container">
+                <h3 class="graph-title">Live Speed Chart</h3>
+                <canvas id="wpmChart" width="800" height="200"></canvas>
             </div>
 
             <div class="words-container">
@@ -256,14 +278,59 @@
                 <div class="result-comparison" id="resultComparison">
                     <p class="comparison-text"></p>
                 </div>
+
+                <!-- Detailed Analytics -->
+                <div class="detailed-analytics">
+                    <h3>Detailed Analysis</h3>
+                    <div class="analytics-grid">
+                        <div class="analytics-item">
+                            <span class="analytics-label">Consistency Score</span>
+                            <div class="analytics-bar">
+                                <div class="analytics-fill" id="consistencyBar"></div>
+                            </div>
+                            <span class="analytics-value" id="consistencyScore">0%</span>
+                        </div>
+                        <div class="analytics-item">
+                            <span class="analytics-label">Error Rate</span>
+                            <div class="analytics-bar">
+                                <div class="analytics-fill error" id="errorBar"></div>
+                            </div>
+                            <span class="analytics-value" id="errorRate">0%</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Keyboard Heatmap -->
+                    <div class="keyboard-heatmap">
+                        <h4>Key Press Heatmap</h4>
+                        <div id="keyboardHeatmap" class="keyboard-visual"></div>
+                    </div>
+
+                    <!-- Slowest Words -->
+                    <div class="slowest-words">
+                        <h4>Words to Practice</h4>
+                        <div id="slowestWordsList" class="words-list"></div>
+                    </div>
+                </div>
+
+                <!-- Achievements -->
+                <div class="achievements-section" id="achievementsSection">
+                    <h3>🏆 Achievements Unlocked</h3>
+                    <div id="achievementsList" class="achievements-list"></div>
+                </div>
             </div>
 
             <div class="modal-actions">
+                <button class="btn-secondary" id="exportBtn">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+                        <path d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z"/>
+                    </svg>
+                    Export PDF
+                </button>
                 <button class="btn-secondary" id="shareBtn">
                     <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
                         <path d="M15 8a3 3 0 11-2.977-2.63l-4.94 2.47a3 3 0 100 4.319l4.94 2.47a3 3 0 10.895-1.789l-4.94-2.47a3.027 3.027 0 000-.74l4.94-2.47C13.456 7.68 14.19 8 15 8z"/>
                     </svg>
-                    Share Results
+                    Share
                 </button>
                 <button class="btn-primary" id="tryAgainBtn">
                     <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
@@ -285,12 +352,6 @@
                 </svg>
             </button>
             <h2 id="leaderboardTitle">🏆 Top Scores</h2>
-            <div class="leaderboard-content" id="leaderboardContent">
-                <p class="leaderboard-empty">Complete a test to see your score!</p>
-            </div>
-        </div>
-    </div>
-
     <!-- Settings Modal -->
     <div class="modal" id="settingsModal" role="dialog" aria-labelledby="settingsTitle" aria-modal="true">
         <div class="modal-overlay"></div>
@@ -311,6 +372,51 @@
                     <input type="checkbox" id="themeToggle" class="toggle-switch">
                 </div>
                 <div class="setting-item">
+                    <label for="showHintsToggle">Show Hints</label>
+                    <input type="checkbox" id="showHintsToggle" class="toggle-switch" checked>
+                </div>
+                <div class="setting-item">
+                    <label for="smoothCaretToggle">Smooth Caret</label>
+                    <input type="checkbox" id="smoothCaretToggle" class="toggle-switch" checked>
+                </div>
+                <div class="setting-item">
+                    <label for="liveWpmToggle">Live WPM Graph</label>
+                    <input type="checkbox" id="liveWpmToggle" class="toggle-switch" checked>
+                </div>
+                <div class="setting-item full-width">
+                    <label for="customTextInput">Custom Practice Text</label>
+                    <textarea id="customTextInput" class="custom-text-area" placeholder="Paste your custom text here..."></textarea>
+                    <button class="btn-primary" id="saveCustomText">Save Custom Text</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Multiplayer Modal -->
+    <div class="modal" id="multiplayerModal" role="dialog" aria-labelledby="multiplayerTitle" aria-modal="true">
+        <div class="modal-overlay"></div>
+        <div class="modal-content modal-large">
+            <button class="modal-close" id="multiplayerClose" aria-label="Close modal">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path d="M18 6L6 18M6 6l12 12" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+            </button>
+            <h2 id="multiplayerTitle">🏁 Multiplayer Race</h2>
+            <div class="multiplayer-content">
+                <div class="room-controls">
+                    <button class="btn-primary" id="createRoomBtn">Create Room</button>
+                    <div class="join-room">
+                        <input type="text" id="roomCodeInput" placeholder="Enter room code" />
+                        <button class="btn-secondary" id="joinRoomBtn">Join Room</button>
+                    </div>
+                </div>
+                <div id="roomInfo" class="room-info hidden">
+                    <p>Room Code: <strong id="roomCode"></strong></p>
+                    <div id="playersList" class="players-list"></div>
+                </div>
+            </div>
+        </div>
+    </div>      <div class="setting-item">
                     <label for="showHintsToggle">Show Hints</label>
                     <input type="checkbox" id="showHintsToggle" class="toggle-switch" checked>
                 </div>
