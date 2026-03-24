@@ -1,4 +1,4 @@
-# 🚀 Advanced Features Guide
+#  Features Guide
 
 ## Overview
 This typing speed test now includes professional-grade features for serious typists and learners.
